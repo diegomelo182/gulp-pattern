@@ -11,7 +11,7 @@ var files = {
 	src: {
 		module: 'src/app/application.module.js',
 		js: 'src/app/**/*.js',
-		sass: 'src/app/**/*.scss',
+		sass: 'src/**/*.scss',
 		html: 'src/**/*.html',
 	},
 	dist: {
@@ -52,10 +52,26 @@ gulp.task('sass_dist', function(){
 	.pipe(gulp.dest(files.dist.css));
 });
 
-gulp.task('html', function(){
+gulp.task('html_dist', function(){
+	// index.html
+	return gulp.src('src/index.html')
+		.pipe(gulp.dest(files.dist.root));
+});
+
+gulp.task('html_build', function(){
 	// index.html
 	return gulp.src('src/index.html')
 		.pipe(gulp.dest(files.build.root));
+});
+
+gulp.task('html_components_dist', function(){
+	return gulp.src('src/app/**/*.html')
+		.pipe(gulp.dest(files.dist.js));
+});
+
+gulp.task('html_components_build', function(){
+	return gulp.src('src/app/**/*.html')
+		.pipe(gulp.dest(files.build.js));
 });
 
 // build
@@ -94,7 +110,10 @@ gulp.task('stream', function (callback) {
 			'sass_dist',
 			'js_build',
 			'sass_build',
-			'html',
+			'html_dist',
+			'html_build',
+			'html_components_dist',
+			'html_components_build',
 			callback
 		);
 	});
@@ -113,10 +132,26 @@ gulp.task('callback', function (callback) {
 			'sass_dist',
 			'js_build',
 			'sass_build',
-			'html',
+			'html_dist',
+			'html_build',
+			'html_components_dist',
+			'html_components_build',
 			callback
 		);
 	});
 });
 
-gulp.task('default', ['js_dist', 'sass_dist','js_build', 'sass_build', 'html', 'stream', 'callback']);
+gulp.task(
+'default',
+[
+	'js_dist',
+	'sass_dist',
+	'js_build',
+	'sass_build',
+	'html_dist',
+	'html_build',
+	'html_components_dist',
+	'html_components_build',
+	'stream',
+	'callback'
+]);
