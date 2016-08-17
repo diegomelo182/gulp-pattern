@@ -30,7 +30,7 @@ var files = {
 
 // dist
 gulp.task('js_dist', function() {
-	var js_files_concat = main_bower_files();
+	var js_files_concat = main_bower_files('**/*.js');
 	js_files_concat = js_files_concat.concat([
 		files.src.module,
 		files.src.js
@@ -91,7 +91,7 @@ gulp.task('html_components_build', function() {
 
 // build
 gulp.task('js_build', function() {
-	var js_files_concat = main_bower_files();
+	var js_files_concat = main_bower_files('**/*.js');
 	js_files_concat = js_files_concat.concat([
 		files.src.module,
 		files.src.js
