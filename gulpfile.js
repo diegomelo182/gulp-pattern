@@ -1,14 +1,15 @@
-const gulp = require('gulp');
-const gulp_concat = require('gulp-concat');
-const gulp_rename = require('gulp-rename');
-const gulp_uglify = require('gulp-uglify');
-const gulp_watch = require('gulp-watch');
-const sass = require('gulp-ruby-sass');
-const main_bower_files = require('main-bower-files');
-const runSequence = require('run-sequence');
-const connect = require('gulp-connect');
+var gulp = require('gulp');
+var gulp_concat = require('gulp-concat');
+var gulp_rename = require('gulp-rename');
+var gulp_uglify = require('gulp-uglify');
+var gulp_watch = require('gulp-watch');
+var sass = require('gulp-ruby-sass');
+var main_bower_files = require('main-bower-files');
+var runSequence = require('run-sequence');
+var connect = require('gulp-connect');
+var jade = require('gulp-jade');
 
-const files = {
+var files = {
 	src: {
 		module: 'src/app/application.module.js',
 		js: 'src/app/**/*.js',
@@ -17,7 +18,7 @@ const files = {
 	},
 	dist: {
 		root: 'dist',
-		js: 'dist/js',
+		js: 'dist/app',
 		css: 'dist/css'
 	},
 	build: {
@@ -54,22 +55,36 @@ gulp.task('sass_dist', function() {
 });
 
 gulp.task('html_dist', function() {
-	return gulp.src('src/index.html')
-		.pipe(gulp.dest(files.dist.root));
+	return gulp.src('src/index.jade')
+	.pipe(jade({
+		locals: files.dist.root
+	}))
+	.pipe(gulp.dest(files.dist.root));
 });
 
 gulp.task('html_build', function() {
-	return gulp.src('src/index.html')
-		.pipe(gulp.dest(files.build.root));
+	return gulp.src('src/index.jade')
+	.pipe(jade({
+		locals: files.build.root,
+		pretty: true
+	}))
+	.pipe(gulp.dest(files.build.root));
 });
 
 gulp.task('html_components_dist', function() {
-	return gulp.src('src/app/**/*.html')
-		.pipe(gulp.dest(files.dist.js));
+	return gulp.src('src/app/**/*.jade')
+		.pipe(jade({
+			locals: files.dist.root
+		}))
+		.pipe(gulp.dest(files.dist.js));;
 });
 
 gulp.task('html_components_build', function() {
-	return gulp.src('src/app/**/*.html')
+	return gulp.src('src/app/**/*.jade')
+		.pipe(jade({
+			locals: files.build.root,
+			pretty: true
+		}))
 		.pipe(gulp.dest(files.build.js))
 		.pipe(connect.reload());
 });
