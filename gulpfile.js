@@ -11,7 +11,7 @@ var jade = require('gulp-jade');
 
 var files = {
 	src: {
-		module: 'src/app/application.module.js',
+		module: 'src/app/**/*.module.js',
 		js: 'src/app/**/*.js',
 		sass: 'src/**/*.scss',
 		html: 'src/**/*.html',
