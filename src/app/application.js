@@ -8,8 +8,3 @@
 		vm = this;
 	}
 })();
-
-function agoravai(teste, test, tes){
-	var value = 1;
-	return true;
-}
