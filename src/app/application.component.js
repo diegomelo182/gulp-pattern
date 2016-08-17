@@ -12,6 +12,6 @@
 
 	function MainCtrl($http) {
 	    var vm = this;
-	    vm.foo = 'bar';
+	    vm.foo = 'Application works!';
 	  }
 })();

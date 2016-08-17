@@ -1,13 +1,14 @@
-var gulp = require('gulp');
-var gulp_concat = require('gulp-concat');
-var gulp_rename = require('gulp-rename');
-var gulp_uglify = require('gulp-uglify');
-var gulp_watch = require('gulp-watch');
-var sass = require('gulp-ruby-sass');
-var main_bower_files = require('main-bower-files');
-var runSequence = require('run-sequence');
+const gulp = require('gulp');
+const gulp_concat = require('gulp-concat');
+const gulp_rename = require('gulp-rename');
+const gulp_uglify = require('gulp-uglify');
+const gulp_watch = require('gulp-watch');
+const sass = require('gulp-ruby-sass');
+const main_bower_files = require('main-bower-files');
+const runSequence = require('run-sequence');
+const connect = require('gulp-connect');
 
-var files = {
+const files = {
 	src: {
 		module: 'src/app/application.module.js',
 		js: 'src/app/**/*.js',
@@ -27,7 +28,7 @@ var files = {
 }
 
 // dist
-gulp.task('js_dist', function(){
+gulp.task('js_dist', function() {
 	var js_files_concat = main_bower_files();
 	js_files_concat = js_files_concat.concat([
 		files.src.module,
@@ -41,7 +42,7 @@ gulp.task('js_dist', function(){
 		.pipe(gulp.dest(files.dist.js));
 });
 
-gulp.task('sass_dist', function(){
+gulp.task('sass_dist', function() {
 	console.log('Compilando Sass --> dist ;)');
 	return sass(files.src.sass, {
 		style: 'compressed',
@@ -52,30 +53,29 @@ gulp.task('sass_dist', function(){
 	.pipe(gulp.dest(files.dist.css));
 });
 
-gulp.task('html_dist', function(){
-	// index.html
+gulp.task('html_dist', function() {
 	return gulp.src('src/index.html')
 		.pipe(gulp.dest(files.dist.root));
 });
 
-gulp.task('html_build', function(){
-	// index.html
+gulp.task('html_build', function() {
 	return gulp.src('src/index.html')
 		.pipe(gulp.dest(files.build.root));
 });
 
-gulp.task('html_components_dist', function(){
+gulp.task('html_components_dist', function() {
 	return gulp.src('src/app/**/*.html')
 		.pipe(gulp.dest(files.dist.js));
 });
 
-gulp.task('html_components_build', function(){
+gulp.task('html_components_build', function() {
 	return gulp.src('src/app/**/*.html')
-		.pipe(gulp.dest(files.build.js));
+		.pipe(gulp.dest(files.build.js))
+		.pipe(connect.reload());
 });
 
 // build
-gulp.task('js_build', function(){
+gulp.task('js_build', function() {
 	var js_files_concat = main_bower_files();
 	js_files_concat = js_files_concat.concat([
 		files.src.module,
@@ -88,7 +88,7 @@ gulp.task('js_build', function(){
 		.pipe(gulp.dest(files.build.js));
 });
 
-gulp.task('sass_build', function(){
+gulp.task('sass_build', function() {
 	return sass(files.src.sass, {
 		loadPath: [files.src.sass]
 	})
@@ -97,14 +97,32 @@ gulp.task('sass_build', function(){
 	.pipe(gulp.dest(files.build.css));
 });
 
+gulp.task('connect_build', function () {
+	connect.server({
+		name: 'Application',
+		root: ['build'],
+		port: 8000,
+		livereload: true
+	});
+});
+
+gulp.task('connect_dist', function () {
+	connect.server({
+		name: 'Application',
+		root: ['dist'],
+		port: 8000,
+		livereload: true
+	});
+});
+
 // watch build
-gulp.task('stream', function (callback) {
+gulp.task('stream', function(callback) {
 	return gulp_watch([
 		files.src.js,
 		files.src.sass,
 		files.src.html
 	],
-	function(){
+	function() {
 		runSequence(
 			'js_dist',
 			'sass_dist',
@@ -113,20 +131,19 @@ gulp.task('stream', function (callback) {
 			'html_dist',
 			'html_build',
 			'html_components_dist',
-			'html_components_build',
-			callback
+			'html_components_build'
 		);
 	});
 });
 
 // watch dist
-gulp.task('callback', function (callback) {
+gulp.task('callback', function(callback) {
 	return gulp_watch([
 		files.src.js,
 		files.src.sass,
 		files.src.html
 	],
-	function(){
+	function() {
 		runSequence(
 			'js_dist',
 			'sass_dist',
@@ -135,8 +152,7 @@ gulp.task('callback', function (callback) {
 			'html_dist',
 			'html_build',
 			'html_components_dist',
-			'html_components_build',
-			callback
+			'html_components_build'
 		);
 	});
 });
@@ -153,5 +169,22 @@ gulp.task(
 	'html_components_dist',
 	'html_components_build',
 	'stream',
-	'callback'
+	'callback',
+	'connect_build'
+]);
+
+gulp.task(
+'prod',
+[
+	'js_dist',
+	'sass_dist',
+	'js_build',
+	'sass_build',
+	'html_dist',
+	'html_build',
+	'html_components_dist',
+	'html_components_build',
+	'stream',
+	'callback',
+	'connect_build'
 ]);
