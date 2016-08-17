@@ -9,7 +9,7 @@ var runSequence = require('run-sequence');
 
 var files = {
 	src: {
-		module: 'src/app/**/*.js',
+		module: 'src/app/application.module.js',
 		js: 'src/app/**/*.js',
 		sass: 'src/app/**/*.scss',
 		html: 'src/**/*.html',
@@ -21,7 +21,7 @@ var files = {
 	},
 	build: {
 		root: 'build',
-		js: 'build/js',
+		js: 'build/app',
 		css: 'build/css'
 	}
 }
@@ -30,6 +30,7 @@ var files = {
 gulp.task('js_dist', function(){
 	var js_files_concat = main_bower_files();
 	js_files_concat = js_files_concat.concat([
+		files.src.module,
 		files.src.js
 	]);
 	console.log('Compilando JS --> dist ;)');
@@ -61,6 +62,7 @@ gulp.task('html', function(){
 gulp.task('js_build', function(){
 	var js_files_concat = main_bower_files();
 	js_files_concat = js_files_concat.concat([
+		files.src.module,
 		files.src.js
 	]);
 
