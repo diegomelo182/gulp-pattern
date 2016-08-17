@@ -17,6 +17,7 @@
     "gulp-uglify": "^2.0.0",
     "gulp-watch": "^4.3.9",
     "main-bower-files": "^2.13.1",
-    "pump": "^1.0.1"
+    "pump": "^1.0.1",
+    "run-sequence": "^1.2.2"
   }
 }
