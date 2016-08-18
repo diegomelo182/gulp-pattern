@@ -1,10 +1,33 @@
 # gulp-pattern
 My gulp pattern using angular + sass + jade + bower + webserver + livereload
 
-## Steps
-Before starting work with this project please execute these commands.
+## Install dependences
+Before starting work with this project please execute foward commands.
 
-* `npm install` to install gulp and gulp dependencies
-* `bower install` to install project dependencies
+Install gulp globally
+```
+npm install -g gulp
+```
 
-Execute `gulp` to run build files or `gulp prod` to run dist files.
+Install gulp and gulp dependencies
+```
+npm install
+```
+
+Install project dependencies
+```
+bower install
+```
+
+## Run project
+In development mode execute this command
+```
+gulp
+``` 
+
+To view production files and to run it on ```gulp connect``` execute this command
+```
+gulp prod
+```
+
+On ```gulp``` and ```gulp prod``` commands, open ```http://localhost:8000``` on your browser to view the final result of the compiled files.
