@@ -8,13 +8,14 @@ var main_bower_files = require('main-bower-files');
 var runSequence = require('run-sequence');
 var connect = require('gulp-connect');
 var jade = require('gulp-jade');
+var cache = require('gulp-cache');
 
 var files = {
 	src: {
 		module: 'src/app/**/*.module.js',
 		js: 'src/app/**/*.js',
 		sass: 'src/**/*.scss',
-		html: 'src/**/*.html',
+		jade: 'src/**/*.jade',
 	},
 	dist: {
 		root: 'dist',
@@ -76,7 +77,8 @@ gulp.task('html_components_dist', function() {
 		.pipe(jade({
 			locals: files.dist.root
 		}))
-		.pipe(gulp.dest(files.dist.js));;
+		.pipe(gulp.dest(files.dist.js))
+		.pipe(connect.reload());
 });
 
 gulp.task('html_components_build', function() {
@@ -130,23 +132,24 @@ gulp.task('connect_dist', function () {
 	});
 });
 
+gulp.task('clear_cache', function (done) {
+	return cache.clearAll(done);
+});
+
 // watch build
 gulp.task('stream', function(callback) {
 	return gulp_watch([
 		files.src.js,
 		files.src.sass,
-		files.src.html
+		files.src.jade
 	],
 	function() {
 		runSequence(
-			'js_dist',
-			'sass_dist',
 			'js_build',
 			'sass_build',
-			'html_dist',
 			'html_build',
-			'html_components_dist',
-			'html_components_build'
+			'html_components_build',
+			'clear_cache'
 		);
 	});
 });
@@ -156,18 +159,15 @@ gulp.task('callback', function(callback) {
 	return gulp_watch([
 		files.src.js,
 		files.src.sass,
-		files.src.html
+		files.src.jade
 	],
 	function() {
 		runSequence(
 			'js_dist',
 			'sass_dist',
-			'js_build',
-			'sass_build',
 			'html_dist',
-			'html_build',
 			'html_components_dist',
-			'html_components_build'
+			'clear_cache'
 		);
 	});
 });
@@ -175,17 +175,12 @@ gulp.task('callback', function(callback) {
 gulp.task(
 'default',
 [
-	'js_dist',
-	'sass_dist',
 	'js_build',
 	'sass_build',
-	'html_dist',
 	'html_build',
-	'html_components_dist',
 	'html_components_build',
-	'stream',
-	'callback',
-	'connect_build'
+	'connect_build',
+	'stream'
 ]);
 
 gulp.task(
@@ -193,13 +188,8 @@ gulp.task(
 [
 	'js_dist',
 	'sass_dist',
-	'js_build',
-	'sass_build',
 	'html_dist',
-	'html_build',
 	'html_components_dist',
-	'html_components_build',
-	'stream',
-	'callback',
-	'connect_build'
+	'connect_dist',
+	'callback'
 ]);
