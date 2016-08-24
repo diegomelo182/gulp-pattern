@@ -203,6 +203,12 @@ gulp.task('clear_cache', function (done) {
 	return cache.clearAll(done);
 });
 
+gulp.task('reload', function (done) {
+	return gulp
+			.src(files.src.jade)
+			.pipe(connect.reload());
+});
+
 // watch build
 gulp.task('stream', function(callback) {
 	// javascripts
@@ -211,7 +217,8 @@ gulp.task('stream', function(callback) {
 	function() {
 		runSequence(
 			'js_build',
-			'clear_cache'
+			'clear_cache',
+			'reload'
 		);
 	});
 
@@ -221,7 +228,8 @@ gulp.task('stream', function(callback) {
 	function() {
 		runSequence(
 			'sass_build',
-			'clear_cache'
+			'clear_cache',
+			'reload'
 		);
 	});
 
@@ -232,7 +240,8 @@ gulp.task('stream', function(callback) {
 		runSequence(
 			'html_build',
 			'html_components_build',
-			'clear_cache'
+			'clear_cache',
+			'reload'
 		);
 	});
 
@@ -242,7 +251,8 @@ gulp.task('stream', function(callback) {
 	function() {
 		runSequence(
 			'image_build',
-			'clear_cache'
+			'clear_cache',
+			'reload'
 		);
 	});
 
@@ -252,7 +262,8 @@ gulp.task('stream', function(callback) {
 	function() {
 		runSequence(
 			'fonts_build',
-			'clear_cache'
+			'clear_cache',
+			'reload'
 		);
 	});
 
@@ -262,27 +273,78 @@ gulp.task('stream', function(callback) {
 	function() {
 		runSequence(
 			'fonts_build',
-			'clear_cache'
+			'clear_cache',
+			'reload'
 		);
 	});
 });
 
 // watch dist
 gulp.task('callback', function(callback) {
-	return gulp_watch([
-		files.src.js,
-		files.src.sass,
-		files.src.jade
-	],
+	// javascripts
+	gulp_watch(
+	files.src.js,
 	function() {
 		runSequence(
 			'js_dist',
+			'clear_cache',
+			'reload'
+		);
+	});
+
+	// sass
+	gulp_watch(
+	files.src.sass,
+	function() {
+		runSequence(
 			'sass_dist',
+			'clear_cache',
+			'reload'
+		);
+	});
+
+	// jade templates
+	gulp_watch(
+	files.src.jade,
+	function() {
+		runSequence(
 			'html_dist',
 			'html_components_dist',
+			'clear_cache',
+			'reload'
+		);
+	});
+
+	// imgs
+	gulp_watch(
+	files.src.imgs,
+	function() {
+		runSequence(
 			'image_dist',
+			'clear_cache',
+			'reload'
+		);
+	});
+
+	// fonts
+	gulp_watch(
+	files.src.fonts,
+	function() {
+		runSequence(
 			'fonts_dist',
-			'clear_cache'
+			'clear_cache',
+			'reload'
+		);
+	});
+
+	// fonts bower
+	gulp_watch(
+	files.src.fonts_bower,
+	function() {
+		runSequence(
+			'fonts_dist',
+			'clear_cache',
+			'reload'
 		);
 	});
 });
