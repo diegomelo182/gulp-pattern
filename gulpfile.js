@@ -37,6 +37,11 @@ var files = {
 	}
 }
 
+var on_error = function(err) {
+	hasError = true;
+	console.log(err.message);
+}
+
 // js dist
 gulp.task('js_dist', function() {
 	var js_files_concat = main_bower_files('**/*.js');
@@ -49,6 +54,7 @@ gulp.task('js_dist', function() {
 		.pipe(gulp_concat(files.dist.js))
 		.pipe(gulp_rename('main.js'))
 		.pipe(gulp_uglify())
+		.on('error', on_error)
 		.pipe(gulp.dest(files.dist.js));
 });
 
@@ -61,6 +67,7 @@ gulp.task('sass_dist', function() {
 	})
 	.pipe(gulp_concat(files.dist.js))
 	.pipe(gulp_rename('main.css'))
+	.on('error', on_error)
 	.pipe(gulp.dest(files.dist.css));
 });
 
@@ -70,6 +77,7 @@ gulp.task('html_dist', function() {
 	.pipe(jade({
 		locals: files.dist.root
 	}))
+	.on('error', on_error)
 	.pipe(gulp.dest(files.dist.root));
 });
 
@@ -80,6 +88,7 @@ gulp.task('html_build', function() {
 		locals: files.build.root,
 		pretty: true
 	}))
+	.on('error', on_error)
 	.pipe(gulp.dest(files.build.root));
 });
 
@@ -89,6 +98,7 @@ gulp.task('html_components_dist', function() {
 		.pipe(jade({
 			locals: files.dist.root
 		}))
+		.on('error', on_error)
 		.pipe(gulp.dest(files.dist.js))
 		.pipe(connect.reload());
 });
@@ -100,6 +110,7 @@ gulp.task('html_components_build', function() {
 			locals: files.build.root,
 			pretty: true
 		}))
+		.on('error', on_error)
 		.pipe(gulp.dest(files.build.js))
 		.pipe(connect.reload());
 });
@@ -115,6 +126,7 @@ gulp.task('js_build', function() {
 	return gulp.src(js_files_concat)
 		.pipe(gulp_concat(files.dist.js))
 		.pipe(gulp_rename('main.js'))
+		.on('error', on_error)
 		.pipe(gulp.dest(files.build.js));
 });
 
@@ -125,6 +137,7 @@ gulp.task('sass_build', function() {
 	})
 	.pipe(gulp_concat(files.build.js))
 	.pipe(gulp_rename('main.css'))
+	.on('error', on_error)
 	.pipe(gulp.dest(files.build.css));
 });
 
@@ -132,6 +145,7 @@ gulp.task('sass_build', function() {
 gulp.task('image_build', function () {
 	return gulp.src(files.src.imgs)
 		.pipe(image())
+		.on('error', on_error)
 		.pipe(gulp.dest(files.build.imgs));
 });
 
@@ -139,24 +153,29 @@ gulp.task('image_build', function () {
 gulp.task('image_dist', function () {
 	return gulp.src(files.src.imgs)
 		.pipe(image())
+		.on('error', on_error)
 		.pipe(gulp.dest(files.dist.imgs));
 });
 
 // fonts dist
 gulp.task('fonts_dist', function () {
 	gulp.src(files.src.fonts)
+		.on('error', on_error)
 		.pipe(gulp.dest(files.dist.fonts));
 
 	gulp.src(files.src.fonts_bower)
+		.on('error', on_error)
 		.pipe(gulp.dest(files.dist.fonts));	
 });
 
 // fonts build
 gulp.task('fonts_build', function () {
 	gulp.src(files.src.fonts)
+		.on('error', on_error)
 		.pipe(gulp.dest(files.build.fonts));
 
 	gulp.src(files.src.fonts_bower)
+		.on('error', on_error)
 		.pipe(gulp.dest(files.build.fonts));	
 });
 
@@ -186,18 +205,62 @@ gulp.task('clear_cache', function (done) {
 
 // watch build
 gulp.task('stream', function(callback) {
-	return gulp_watch([
-		files.src.js,
-		files.src.sass,
-		files.src.jade
-	],
+	// javascripts
+	gulp_watch(
+	files.src.js,
 	function() {
 		runSequence(
 			'js_build',
+			'clear_cache'
+		);
+	});
+
+	// sass
+	gulp_watch(
+	files.src.sass,
+	function() {
+		runSequence(
 			'sass_build',
+			'clear_cache'
+		);
+	});
+
+	// jade templates
+	gulp_watch(
+	files.src.jade,
+	function() {
+		runSequence(
 			'html_build',
 			'html_components_build',
+			'clear_cache'
+		);
+	});
+
+	// imgs
+	gulp_watch(
+	files.src.imgs,
+	function() {
+		runSequence(
 			'image_build',
+			'clear_cache'
+		);
+	});
+
+	// fonts
+	gulp_watch(
+	files.src.fonts,
+	function() {
+		runSequence(
+			'fonts_build',
+			'clear_cache'
+		);
+	});
+
+	// fonts bower
+	gulp_watch(
+	files.src.fonts_bower,
+	function() {
+		runSequence(
 			'fonts_build',
 			'clear_cache'
 		);
@@ -226,26 +289,30 @@ gulp.task('callback', function(callback) {
 
 gulp.task(
 'default',
-[
-	'js_build',
-	'sass_build',
-	'html_build',
-	'html_components_build',
-	'image_build',
-	'fonts_build',
-	'connect_build',
-	'stream'
-]);
+function(callback){
+	runSequence(
+		'js_build',
+		'sass_build',
+		'html_build',
+		'html_components_build',
+		'image_build',
+		'fonts_build',
+		'connect_build',
+		'stream'
+	);
+});
 
 gulp.task(
 'prod',
-[
-	'js_dist',
-	'sass_dist',
-	'html_dist',
-	'html_components_dist',
-	'image_dist',
-	'fonts_dist',
-	'connect_dist',
-	'callback'
-]);
+function(callback){
+	runSequence(
+		'js_dist',
+		'sass_dist',
+		'html_dist',
+		'html_components_dist',
+		'image_dist',
+		'fonts_dist',
+		'connect_dist',
+		'callback'
+	);
+});
