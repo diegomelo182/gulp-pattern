@@ -15,7 +15,7 @@ var files = {
 	src: {
 		module: 'src/app/**/*.module.js',
 		js: 'src/app/**/*.js',
-		sass: 'src/**/*.scss',
+		sass: 'src/style.scss',
 		jade: 'src/**/*.jade',
 		fonts: 'src/fonts/**/*.{ttf,eot,woff,woff2,svg}',
 		fonts_bower: 'bower_components/**/*.{ttf,eot,woff,woff2,svg}',
