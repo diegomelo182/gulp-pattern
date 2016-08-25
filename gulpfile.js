@@ -185,7 +185,8 @@ gulp.task('connect_build', function () {
 		name: 'Application',
 		root: ['build'],
 		port: 8000,
-		livereload: true
+		livereload: true,
+		fallback: 'build/index.html'
 	});
 });
 
@@ -195,7 +196,8 @@ gulp.task('connect_dist', function () {
 		name: 'Application',
 		root: ['dist'],
 		port: 8000,
-		livereload: true
+		livereload: true,
+		fallback: 'dist/index.html'
 	});
 });
 
