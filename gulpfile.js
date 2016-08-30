@@ -20,7 +20,7 @@ var files = {
 		jade: 'src/**/*.jade',
 		fonts: 'src/fonts/**/*.{ttf,eot,woff,woff2,svg}',
 		fonts_bower: 'bower_components/**/*.{ttf,eot,woff,woff2,svg}',
-		imgs: 'src/imgs/**/*.{jpg,jpeg,gif,png}',
+		imgs: 'src/imgs/**/*.{jpg,jpeg,gif,png,ico}',
 		json: 'src/json/**/*.json'
 	},
 	dist: {
