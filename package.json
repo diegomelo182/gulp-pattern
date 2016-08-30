@@ -8,7 +8,9 @@
   },
   "author": "Diego Melo <diegomelo182@gmail.com>",
   "license": "ISC",
-  "dependencies": {},
+  "dependencies": {
+    "del": "^2.2.2"
+  },
   "devDependencies": {
     "gulp": "^3.9.1",
     "gulp-cache": "^0.4.5",
