@@ -14,7 +14,7 @@
     "gulp-concat": "^2.6.0",
     "gulp-connect": "^5.0.0",
     "gulp-image": "^2.4.1",
-    "gulp-jade": "^1.1.0",
+    "gulp-pug": "^3.0.4",
     "gulp-rename": "^1.2.2",
     "gulp-ruby-sass": "^2.1.0",
     "gulp-uglify": "^2.0.0",

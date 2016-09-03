@@ -1,6 +1,6 @@
 (function() {
 	'use strict';
-	
+
 	angular
 		.module('application')
 		.component('application', {
@@ -13,5 +13,5 @@
 	function MainCtrl($http) {
 	    var vm = this;
 	    vm.foo = 'Application works!';
-	  }
+	}
 })();
