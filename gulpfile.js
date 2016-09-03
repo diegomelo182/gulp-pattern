@@ -7,7 +7,7 @@ var sass = require('gulp-ruby-sass');
 var main_bower_files = require('main-bower-files');
 var runSequence = require('run-sequence');
 var connect = require('gulp-connect');
-var jade = require('gulp-jade');
+var pug = require('gulp-pug');
 var cache = require('gulp-cache');
 var image = require('gulp-image');
 var del = require('del');
@@ -17,7 +17,7 @@ var files = {
 		module: 'src/app/**/*.module.js',
 		js: 'src/app/**/*.js',
 		sass: 'src/style.scss',
-		jade: 'src/**/*.jade',
+		pug: 'src/**/*.pug',
 		fonts: 'src/fonts/**/*.{ttf,eot,woff,woff2,svg}',
 		fonts_bower: 'bower_components/**/*.{ttf,eot,woff,woff2,svg}',
 		imgs: 'src/imgs/**/*.{jpg,jpeg,gif,png,ico}',
@@ -39,7 +39,7 @@ var files = {
 		imgs: 'build/imgs',
 		json: 'build/json'
 	}
-}
+};
 
 var on_error = function(err) {
 	hasError = true;
@@ -64,7 +64,7 @@ gulp.task('js_dist', function() {
 // js dist remove
 gulp.task('rm_js_dist', function() {
 	return del(['dist/*.js']).then(paths => {
-		console.log('Arquivos e diretorios removidos:\n', paths.join('\n'));
+		console.log('Arquivos e diretórios removidos:\n', paths.join('\n'));
 	});
 });
 
@@ -84,14 +84,14 @@ gulp.task('sass_dist', function() {
 // css dist remove
 gulp.task('rm_sass_dist', function() {
 	return del(['dist/*.css']).then(paths => {
-		console.log('Arquivos e diretorios removidos:\n', paths.join('\n'));
+		console.log('Arquivos e diretórios removidos:\n', paths.join('\n'));
 	});
 });
 
 // html dist
 gulp.task('html_dist', function() {
-	return gulp.src('src/index.jade')
-	.pipe(jade({
+	return gulp.src('src/index.pug')
+	.pipe(pug({
 		locals: files.dist.root
 	}))
 	.on('error', on_error)
@@ -101,14 +101,14 @@ gulp.task('html_dist', function() {
 // html dist remove
 gulp.task('rm_html_dist', function() {
 	return del(['dist/index.html']).then(paths => {
-		console.log('Arquivos e diretorios removidos:\n', paths.join('\n'));
+		console.log('Arquivos e diretórios removidos:\n', paths.join('\n'));
 	});
 });
 
 // html build
 gulp.task('html_build', function() {
-	return gulp.src('src/index.jade')
-	.pipe(jade({
+	return gulp.src('src/index.pug')
+	.pipe(pug({
 		locals: files.build.root,
 		pretty: true
 	}))
@@ -119,14 +119,14 @@ gulp.task('html_build', function() {
 // html build remove
 gulp.task('rm_html_build', function() {
 	return del(['build/index.html']).then(paths => {
-		console.log('Arquivos e diretorios removidos:\n', paths.join('\n'));
+		console.log('Arquivos e diretórios removidos:\n', paths.join('\n'));
 	});
 });
 
 // html components dist
 gulp.task('html_components_dist', function() {
-	return gulp.src('src/app/**/*.jade')
-		.pipe(jade({
+	return gulp.src('src/app/**/*.pug')
+		.pipe(pug({
 			locals: files.dist.root
 		}))
 		.on('error', on_error)
@@ -137,14 +137,14 @@ gulp.task('html_components_dist', function() {
 // html components dist remove
 gulp.task('rm_html_components_dist', function() {
 	return del(['dist/app/**/*.html']).then(paths => {
-		console.log('Arquivos e diretorios removidos:\n', paths.join('\n'));
+		console.log('Arquivos e diretórios removidos:\n', paths.join('\n'));
 	});
 });
 
 // html components build
 gulp.task('html_components_build', function() {
-	return gulp.src('src/app/**/*.jade')
-		.pipe(jade({
+	return gulp.src('src/app/**/*.pug')
+		.pipe(pug({
 			locals: files.build.root,
 			pretty: true
 		}))
@@ -156,7 +156,7 @@ gulp.task('html_components_build', function() {
 // html components build remove
 gulp.task('rm_html_components_build', function() {
 	return del(['build/app/**/*.html']).then(paths => {
-		console.log('Arquivos e diretorios removidos:\n', paths.join('\n'));
+		console.log('Arquivos e diretórios removidos:\n', paths.join('\n'));
 	});
 });
 
@@ -178,7 +178,7 @@ gulp.task('js_build', function() {
 // js build remove
 gulp.task('rm_js_build', function() {
 	return del(['build/*.js']).then(paths => {
-		console.log('Arquivos e diretorios removidos:\n', paths.join('\n'));
+		console.log('Arquivos e diretórios removidos:\n', paths.join('\n'));
 	});
 });
 
@@ -196,7 +196,7 @@ gulp.task('sass_build', function() {
 // css build remove
 gulp.task('rm_sass_build', function() {
 	return del(['build/*.css']).then(paths => {
-		console.log('Arquivos e diretorios removidos:\n', paths.join('\n'));
+		console.log('Arquivos e diretórios removidos:\n', paths.join('\n'));
 	});
 });
 
@@ -211,7 +211,7 @@ gulp.task('image_build', function () {
 // image build remove
 gulp.task('rm_image_build', function() {
 	return del(['build/imgs/*.{jpg,jpeg,gif,png}']).then(paths => {
-		console.log('Arquivos e diretorios removidos:\n', paths.join('\n'));
+		console.log('Arquivos e diretórios removidos:\n', paths.join('\n'));
 	});
 });
 
@@ -226,7 +226,7 @@ gulp.task('image_dist', function () {
 // image dist remove
 gulp.task('rm_image_dist', function() {
 	return del(['dist/imgs/*.{jpg,jpeg,gif,png}']).then(paths => {
-		console.log('Arquivos e diretorios removidos:\n', paths.join('\n'));
+		console.log('Arquivos e diretórios removidos:\n', paths.join('\n'));
 	});
 });
 
@@ -238,13 +238,13 @@ gulp.task('fonts_dist', function () {
 
 	gulp.src(files.src.fonts_bower)
 		.on('error', on_error)
-		.pipe(gulp.dest(files.dist.fonts));	
+		.pipe(gulp.dest(files.dist.fonts));
 });
 
 // fonts dist remove
 gulp.task('rm_fonts_dist', function() {
 	return del(['dist/fonts/*.{ttf,eot,woff,woff2,svg}']).then(paths => {
-		console.log('Arquivos e diretorios removidos:\n', paths.join('\n'));
+		console.log('Arquivos e diretórios removidos:\n', paths.join('\n'));
 	});
 });
 
@@ -256,13 +256,13 @@ gulp.task('fonts_build', function () {
 
 	gulp.src(files.src.fonts_bower)
 		.on('error', on_error)
-		.pipe(gulp.dest(files.build.fonts));	
+		.pipe(gulp.dest(files.build.fonts));
 });
 
 // fonts build remove
 gulp.task('rm_fonts_build', function() {
 	return del(['build/fonts/*.{ttf,eot,woff,woff2,svg}']).then(paths => {
-		console.log('Arquivos e diretorios removidos:\n', paths.join('\n'));
+		console.log('Arquivos e diretórios removidos:\n', paths.join('\n'));
 	});
 });
 
@@ -276,7 +276,7 @@ gulp.task('json_build', function () {
 // json build remove
 gulp.task('rm_json_build', function() {
 	return del(['build/json/*.json']).then(paths => {
-		console.log('Arquivos e diretorios removidos:\n', paths.join('\n'));
+		console.log('Arquivos e diretórios removidos:\n', paths.join('\n'));
 	});
 });
 
@@ -290,7 +290,7 @@ gulp.task('json_dist', function () {
 // json dist remove
 gulp.task('rm_json_dist', function() {
 	return del(['dist/json/*.json']).then(paths => {
-		console.log('Arquivos e diretorios removidos:\n', paths.join('\n'));
+		console.log('Arquivos e diretórios removidos:\n', paths.join('\n'));
 	});
 });
 
@@ -322,7 +322,7 @@ gulp.task('clear_cache', function (done) {
 
 gulp.task('reload', function (done) {
 	return gulp
-			.src(files.src.jade)
+			.src(files.src.pug)
 			.pipe(connect.reload());
 });
 
@@ -352,9 +352,9 @@ gulp.task('stream', function(callback) {
 		);
 	});
 
-	// jade templates
+	// pug templates
 	gulp_watch(
-	files.src.jade,
+	files.src.pug,
 	function() {
 		runSequence(
 			'rm_html_build',
@@ -441,9 +441,9 @@ gulp.task('callback', function(callback) {
 		);
 	});
 
-	// jade templates
+	// pug templates
 	gulp_watch(
-	files.src.jade,
+	files.src.pug,
 	function() {
 		runSequence(
 			'rm_html_dist',
