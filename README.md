@@ -1,5 +1,5 @@
 # gulp-pattern
-My gulp pattern using angular + sass + jade + bower + webserver + livereload
+My gulp pattern using angular + sass + jade(pug) + bower + webserver + livereload
 
 ## Install dependences
 Before starting work with this project please execute foward commands.
