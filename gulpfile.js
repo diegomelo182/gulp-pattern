@@ -203,7 +203,6 @@ gulp.task('rm_sass_build', function() {
 // image build
 gulp.task('image_build', function () {
 	return gulp.src(files.src.imgs)
-		.pipe(image())
 		.on('error', on_error)
 		.pipe(gulp.dest(files.build.imgs));
 });
